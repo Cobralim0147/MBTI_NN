@@ -90,7 +90,7 @@ predictions = mlp.predict(X_test)
 #to evaluate the matrix of the neuro network 
 print(f'confusion matrix= \n{confusion_matrix(y_test, predictions)}')
 print(f'classification report= \n{classification_report(y_test, predictions)}')
-
+print("Final training loss:", mlp.loss_)
 print("Actual labels:", Counter(y_test))
 print("Predicted labels:", Counter(predictions))
 
