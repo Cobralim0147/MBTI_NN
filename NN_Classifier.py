@@ -52,16 +52,15 @@ def visualise(mlp, input_label):
     plt.show()
 
 
-
 # Load the dataset
 file_path = 'mbti_characters.csv'  # Replace with the path to your dataset
 data = pd.read_csv(file_path)
 
 # Select relevant columns for features and targets
 features_columns = ['big_5_SLOAN', 'socionics', 'attitudinal_psyche', 'classic_jungian', 'enneagram']
-# target_columns = ['letter_1_percentage', 'letter_2_percentage', 'letter_3_percentage', 'letter_4_percentage']
 target_columns = ['four_letter']
 
+#drop data that are empty, for consistancy
 data = data[features_columns + target_columns].dropna()
 
 # Encode categorical variables
@@ -76,13 +75,10 @@ y = data[target_columns].values.ravel()
 # Normalize features and targets
 scaler_X = StandardScaler()
 X_scaled = scaler_X.fit_transform(X)
-
 y_scaled = y
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled, test_size=0.25, random_state=42)
-
-# print(pd.DataFrame(X_train, columns=target_columns).describe().transpose())
 
 # mlp = MLPClassifier(hidden_layer_sizes=(5), max_iter=50)
 mlp = MLPClassifier(
@@ -91,10 +87,12 @@ mlp = MLPClassifier(
 mlp.fit(X_train, y_train)
 predictions = mlp.predict(X_test)
 
+#to evaluate the matrix of the neuro network 
 print(f'confusion matrix= \n{confusion_matrix(y_test, predictions)}')
 print(f'classification report= \n{classification_report(y_test, predictions)}')
 
 print("Actual labels:", Counter(y_test))
 print("Predicted labels:", Counter(predictions))
 
-visualise(mlp, features_columns)
+#to visualize the chart
+# visualise(mlp, features_columns)
