@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from collections import Counter
 
 
-
 def visualise(mlp, input_label):
 
     # Print the input data
@@ -51,16 +50,15 @@ def visualise(mlp, input_label):
     
     plt.show()
 
-
 # Load the dataset
-file_path = 'mbti_characters.csv'  # Replace with the path to your dataset
+file_path = 'mbti_characters.csv'  
 data = pd.read_csv(file_path)
 
 # Select relevant columns for features and targets
 features_columns = ['big_5_SLOAN', 'socionics', 'attitudinal_psyche', 'classic_jungian', 'enneagram']
 target_columns = ['four_letter']
 
-#drop data that are empty, for consistancy
+# Drop data that are empty, for consistancy
 data = data[features_columns + target_columns].dropna()
 
 # Encode categorical variables
@@ -80,19 +78,18 @@ y_scaled = y
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled, test_size=0.25, random_state=42)
 
-# mlp = MLPClassifier(hidden_layer_sizes=(5), max_iter=50)
 mlp = MLPClassifier(
     hidden_layer_sizes=(20, 20, 20), max_iter=200, activation='tanh', solver='lbfgs', random_state=42)
 
 mlp.fit(X_train, y_train)
 predictions = mlp.predict(X_test)
 
-#to evaluate the matrix of the neuro network 
+# Performance metrics to evaluate the neural network 
 print(f'confusion matrix= \n{confusion_matrix(y_test, predictions)}')
 print(f'classification report= \n{classification_report(y_test, predictions)}')
 print("Final training loss:", mlp.loss_)
 print("Actual labels:", Counter(y_test))
 print("Predicted labels:", Counter(predictions))
 
-#to visualize the chart
-# visualise(mlp, features_columns)
+# Visualize the network
+visualise(mlp, features_columns)
